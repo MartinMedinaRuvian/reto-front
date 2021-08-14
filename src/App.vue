@@ -1,17 +1,17 @@
 <template>
   <div id="app" class="text-center">
-    <Navbar />
+    <Cabecera />
     <router-view />
     <Footer />
   </div>
 </template>
 
 <script>
-import Navbar from '@/components/parcial/_header.vue'
-import Footer from '@/components/parcial/_footer.vue'
+import Cabecera from '@/components/parcial/Cabecera.vue'
+import Footer from '@/components/parcial/Footer.vue'
 export default {
   components:{
-    Navbar,
+    Cabecera,
     Footer
   }
 }
