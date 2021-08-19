@@ -3,7 +3,6 @@
     <div class="mt-5">
       <div class="row">
         <div class="col-md-4">
-
           <div class="card">
             <div class="card-header">
               <h6>Agregar producto</h6>
@@ -18,7 +17,7 @@
                     type="text"
                     placeholder="Descripción articulo"
                     class="form-control"
-                    v-model="articulo.descripcion"
+                    v-model="articulo.defa_articulo"
                     required
                     id="txtdescipcion"
                   />
@@ -28,7 +27,7 @@
                     type="number"
                     placeholder="Cantidad"
                     class="form-control"
-                    v-model="articulo.cantidad"
+                    v-model="articulo.defa_cantidad"
                     required
                   />
                 </div>
@@ -37,7 +36,7 @@
                     type="number"
                     placeholder="Valor"
                     class="form-control"
-                    v-model="articulo.valor"
+                    v-model="articulo.defa_valor"
                     required
                   />
                 </div>
@@ -64,9 +63,9 @@
             </thead>
             <tbody>
               <tr v-for="dato of articulos" :key="dato.index">
-                <td>{{ dato.descripcion }}</td>
-                <td>{{ dato.cantidad }}</td>
-                <td>$ {{ dato.valor }}</td>
+                <td>{{ dato.defa_articulo }}</td>
+                <td>{{ dato.defa_cantidad }}</td>
+                <td>$ {{ formatoMoneda(dato.defa_valor) }}</td>
               </tr>
             </tbody>
           </table>
@@ -111,7 +110,7 @@
       </div>
 
       <div class="mt-5">
-        <button class="btn btn-success" @click="guardarFactura(infoBasica)">
+        <button class="btn btn-success" @click="guardarFactura()">
           Guardar factura
         </button>
       </div>
@@ -127,58 +126,74 @@ export default {
       infoBasica: {},
       articulo: {},
       articulos: [],
+      articulosGuardar: [],
       iva: config.VALOR_IVA,
       iva_total: 0,
       subtotal: 0,
       total: 0,
+      urlAPI : config.URL_API,
+      numeroFactura: 1
     };
+  },
+  created(){
+    this.numeroFacturaGuardar();
   },
   methods: {
     agregarArticulo(articulo) {
-      this.articulos.push(articulo);
+      const {defa_articulo, defa_cantidad, defa_valor} = articulo;
+      const defa_numerofactura = this.numeroFactura;
+      const articuloAgregar ={
+        defa_numerofactura,
+        defa_articulo,
+        defa_cantidad,
+        defa_valor
+      }
+      this.articulos.push(articuloAgregar);
+      this.articulosGuardar.push(Object.values(articuloAgregar));
       this.articulo = {};
-      document.querySelector('#txtdescipcion').focus();
+      document.querySelector("#txtdescipcion").focus();
     },
     calcularTotal() {
       let suma = 0;
       for (let dato of this.articulos) {
-        suma += parseInt(dato.valor);
+        suma += parseInt(dato.defa_valor);
       }
       this.subtotal = suma;
       this.iva_total = this.subtotal * this.iva;
       this.total = this.subtotal + this.iva_total;
     },
-    formatoMoneda(numero){
+    formatoMoneda(numero) {
       return new Intl.NumberFormat().format(numero);
     },
-    guardarFactura(infoBasica) {
-      const { fac_nombrecliente, fac_fecha } = infoBasica;
-      const datosGuardar = {
+    guardarFactura() {
+      const { fac_nombrecliente, fac_fecha } = this.infoBasica;
+      const facturaGuardar = {
         fac_nombrecliente,
         fac_fecha,
         fac_subtotal: this.subtotal,
         fac_iva: this.iva_total,
         fac_total: this.total,
       };
-      console.log(datosGuardar);
-      this.axios
-        .post("facturas", datosGuardar, {
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods":
-              "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers":
-              "Origin, Content-Type, X-Auth-Token",
-          },
-        })
-        .then((res) => {
-          console.log(res);
-          this.articulos = {};
-        })
-        .catch((e) => {
+
+      this.axios.post("facturacion", facturaGuardar)
+      .then((res) => {
+          console.log(res)
+          this.guardarDetallesFacturas()
+        }).catch((e) => {
           console.log(e);
         });
     },
+    guardarDetallesFacturas(){
+     this.axios.post("detallefactura", this.articulosGuardar)
+     .then(res=>{
+       console.log(res)
+     })
+    },
+    async numeroFacturaGuardar(){
+      const response = await fetch(this.urlAPI + 'facturacion/numero');
+      const numero = await response.json();
+      this.numeroFactura = numero;
+    }
   },
 };
 </script>
