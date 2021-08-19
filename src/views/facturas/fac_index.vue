@@ -1,7 +1,9 @@
 <template>
     <div class="container text-center mt-5">
         <h4>Facturas:</h4>
-        <table class="table table-center table-primary">
+        <router-link to="/facturaguardar" class="btn btn-primary">Nueva factura</router-link>
+
+        <table class="table table-center table-primary mt-3">
             <thead>
               <tr>
                 <th scope="col">Numero</th>
@@ -15,9 +17,9 @@
             </thead>
             <tbody>
               <tr v-for="dato of datos" :key="dato.index">
-                <td>{{ dato.fac_numerofactura }}</td>
+                <td><router-link :to="{name: 'FacturasPorNumero', params: {numfactura: dato.fac_numerofactura} }" class="btn btn-primary">{{ dato.fac_numerofactura }}</router-link></td>
                 <td>{{ dato.fac_nombrecliente }}</td>
-                <td>$ {{ dato.fac_fecha }}</td>
+                <td>{{ dato.fac_fecha }}</td>
                 <td>$ {{ dato.fac_subtotal }}</td>
                 <td>$ {{ dato.fac_iva }}</td>
                 <td>$ {{ dato.fac_total }}</td>

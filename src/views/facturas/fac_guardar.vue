@@ -88,14 +88,6 @@
                   v-model="infoBasica.fac_nombrecliente"
                 />
               </div>
-              <div class="mb-3">
-                <input
-                  type="date"
-                  placeholder="Fecha"
-                  class="form-control"
-                  v-model="infoBasica.fac_fecha"
-                />
-              </div>
             </div>
           </div>
         </div>
@@ -132,7 +124,7 @@ export default {
       subtotal: 0,
       total: 0,
       urlAPI : config.URL_API,
-      numeroFactura: 1
+      numeroFactura: 1,
     };
   },
   created(){
@@ -166,7 +158,10 @@ export default {
       return new Intl.NumberFormat().format(numero);
     },
     guardarFactura() {
-      const { fac_nombrecliente, fac_fecha } = this.infoBasica;
+      const { fac_nombrecliente } = this.infoBasica;
+      const date = new Date();
+      const fac_fecha = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
+      console.log(fac_fecha)
       const facturaGuardar = {
         fac_nombrecliente,
         fac_fecha,
@@ -185,8 +180,9 @@ export default {
     },
     guardarDetallesFacturas(){
      this.axios.post("detallefactura", this.articulosGuardar)
-     .then(res=>{
-       console.log(res)
+     .then(()=>{
+       
+       this.$router.push({name:'Facturas'})
      })
     },
     async numeroFacturaGuardar(){

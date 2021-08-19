@@ -15,7 +15,12 @@ const routes = [
     component: () => import('@/views/facturas/fac_index.vue')
   },
   {
-    path: '/facturas/guardar',
+    path: '/facturas/:numfactura',
+    name: 'FacturasPorNumero',
+    component: () => import('@/views/facturas/fac_detalles.vue')
+  },
+  {
+    path: '/facturaguardar',
     name: 'FacturasGuardar',
     component: () => import('@/views/facturas/fac_guardar.vue')
   },

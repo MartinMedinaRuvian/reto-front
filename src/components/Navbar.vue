@@ -16,16 +16,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <router-link to="/" class="nav-link">Inicio</router-link>
-            </li>
-
+  
             <li class="nav-item">
               <router-link to="/facturas" class="nav-link">Facturas</router-link>
-            </li>
-         
-            <li class="nav-item">
-                <router-link to="/facturas/guardar" class="nav-link">Nueva factura</router-link>
             </li>
 
             <li class="nav-item">
