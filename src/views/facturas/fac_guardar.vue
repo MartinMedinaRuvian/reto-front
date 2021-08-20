@@ -5,7 +5,7 @@
         <div class="col-md-4">
           <div class="card">
             <div class="card-header">
-              <h6>Agregar producto</h6>
+              <h6>Agregar articulo</h6>
             </div>
 
             <div class="card-body">
@@ -43,7 +43,7 @@
                 <div class="mb-3">
                   <input
                     type="submit"
-                    value="Agregar producto"
+                    value="Agregar articulo"
                     class="form-control btn btn-primary"
                   />
                 </div>
@@ -154,9 +154,6 @@ export default {
       this.iva_total = this.subtotal * this.iva;
       this.total = this.subtotal + this.iva_total;
     },
-    formatoMoneda(numero) {
-      return new Intl.NumberFormat().format(numero);
-    },
     guardarFactura() {
       const { fac_nombrecliente } = this.infoBasica;
       const date = new Date();
@@ -189,6 +186,9 @@ export default {
       const response = await fetch(this.urlAPI + 'facturacion/numero');
       const numero = await response.json();
       this.numeroFactura = numero;
+    },
+    formatoMoneda(numero) {
+      return new Intl.NumberFormat().format(numero);
     }
   },
 };

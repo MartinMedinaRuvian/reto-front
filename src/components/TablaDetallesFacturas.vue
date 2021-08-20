@@ -22,7 +22,7 @@
 </template>
 <script>
 export default {
-    name:'TablaDetalleFactura',
+    name:'TablaDetallesFacturas',
     props:{
         datos:{}
     }

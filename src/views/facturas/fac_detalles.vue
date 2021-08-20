@@ -1,18 +1,17 @@
 <template>
     <div class="container mt-5">
         <h5>Información de la factura # {{ $route.params.numfactura }}</h5>
-         <TablaDetalleFactura :datos="datos">
-
-         </TablaDetalleFactura>
+         <TablaDetallesFacturas :datos="datos"></TablaDetallesFacturas>
+         <h5 class="text-primary">Total: $ {{ $route.params.subtotal }}</h5>
     </div>
 </template>
 <script>
-import TablaDetalleFactura from '@/components/TablaDetalleFactura';
+import TablaDetallesFacturas from '@/components/TablaDetallesFacturas';
 import config from '@/config/config.js'
 export default {
     name:'facdetalles',
     components:{
-        TablaDetalleFactura
+        TablaDetallesFacturas
     },
     data(){
         return{

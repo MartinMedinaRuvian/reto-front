@@ -1,22 +1,26 @@
 <template>
     <div class="mt-5 container">
       <h5>Detalle de facturas:</h5>
-       <TarjetaDetalleFactura :datos="datos" class="mt-3"/>
+       <TablaDetallesFacturas :datos="datos" class="mt-3"/>
+       <h5>Total $ {{formatoMoneda(total)}}</h5>
     </div>
 </template>
 
 <script>
-import TarjetaDetalleFactura from '@/components/TablaDetalleFactura'
-import config from '@/config/config.js'
+import TablaDetallesFacturas from '@/components/TablaDetallesFacturas'
+import { mapState } from 'vuex'
 export default {
     data(){
         return{
-            urlApi : config.URL_API,
-            datos:[]
+            datos:[],
+            total:0
         }
     },
+    computed:{
+      ...mapState(['urlApi'])
+    },
     components:{
-      TarjetaDetalleFactura
+      TablaDetallesFacturas
     },
     created(){
         this.obtenerTodos();
@@ -26,7 +30,19 @@ export default {
             const respuesta = await fetch(this.urlApi + 'detallefactura')
             const datos = await respuesta.json();
             this.datos = datos;
-        }
+            this.totalVentas();
+        },
+        totalVentas(){
+          let total = 0;
+          const datos = this.datos;
+          for(let dato of datos){
+            total += dato.defa_valor;
+          }
+          this.total = total;
+        },
+        formatoMoneda(numero) {
+      return new Intl.NumberFormat().format(numero);
+    }
     }
 }
 </script>
